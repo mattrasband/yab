@@ -1,0 +1,8 @@
+# Java Norms
+target/
+
+# Editors
+*.iml
+.idea/
+
+**/application.yml
