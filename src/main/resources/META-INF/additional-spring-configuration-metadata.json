@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "slack.app.client-id",
+      "type": "java.lang.String",
+      "description": "Slack Application client id."
+    }
+  ]
+}

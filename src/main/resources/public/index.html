@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <title>Yet Another Bot</title>
+
+    <style>
+        * { padding: 0; margin: 0; }
+    </style>
+    <link rel="stylesheet" href="/webjars/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" type="text/css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css"/>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-inverse navbar-full">
+        <a class="navbar-brand" href="#">Yet Another Bot</a>
+
+        <div class="float-xs-right">
+            <a href="/auth/add_to_slack">
+                <img alt="Add to Slack" height="40" width="139"
+                     src="https://platform.slack-edge.com/img/add_to_slack.png"
+                     srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" />
+            </a>
+        </div>
+    </nav>
+
+    <div class="text-sm-center bg-info text-white" style="min-height: 250px; padding-top: 40px;">
+        <h1 class="display-3">Everyone <i class="fa fa-heart" aria-hidden="true"></i> Bots</h1>
+        <div class="container">
+            <hr class="lead"/>
+        </div>
+        <p class="my-2">This makes bots easy to build with <a href="https://spring.io">Spring Boot</a></p>
+    </div>
+
+    <div class="container-fluid">
+        <div class="col-sm-3 text-sm-center pt-2">
+            <h5 class="text-muted">
+                Real Time Messaging (RTM)<br/>&amp; Web Events
+            </h5>
+            <p>
+                Use the Real Time Messaging API with ease. Get alerted of events as they happen.
+            </p>
+            <p>
+                Don't call <a href="https://slack.com">Slack</a>, let them call you.
+            </p>
+        </div>
+        <div class="col-sm-4 offset-sm-1 text-sm-center pt-2">
+            <h5 class="text-muted">
+                Slash Commands
+            </h5>
+            <p>
+                Respond to user initiated actions with rich messages, including action buttons.
+            </p>
+        </div>
+        <div class="col-sm-3 offset-sm-1 text-sm-center pt-2">
+            <h5 class="text-muted">
+                Add To Slack
+            </h5>
+            <p>
+                The Slack app auth flow is already done, just use it.<br/><br/>
+                <i class="fa fa-hand-o-right" aria-hidden="true"></i>
+                <img alt="Add to Slack" height="40" width="139"
+                     src="https://platform.slack-edge.com/img/add_to_slack.png"
+                     srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" />
+            </p>
+        </div>
+    </div>
+
+    <footer class="text-sm-center" style="position: absolute; bottom: 0; background-color: white; line-height: 60px; width: 100%; display: block;">
+        <div class="container text-muted">
+            <span>&copy; 2016 Matt Rasband</span>
+        </div>
+    </footer>
+
+    <script src="/webjars/jquery/1.11.1/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js"></script>
+</body>
+</html>
