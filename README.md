@@ -41,14 +41,7 @@ The above just gets you my defaults, which is mostly just rubbish.
 
 ### RTM API (Real Time Messaging)
 
-**Currently not included**
-
-For now I chose to leave this out for a few reasons:
-
-1. No abstraction is better than the wrong abstraction...
-1. Simplicity - It's frankly simpler to cover more use-cases as a base app with the Web Events API (slack calls you)
-1. Scale - This should handle a fair number of RTM connections, but at some point it's not trivial to load balance server-initiated connections across multiple instances.
-1. The main use case for the RTM Api is probably a chat bot (which can still be done via the Events API), otherwise your users need to know too much about how to run your commands. Using Slash Commands gives your users helpful usage prompts.
+Currently very raw, basically it reads the event stream and deserializes them to the correct java object, broadcasting them out via the Spring mechanisms. But since the SlackClient is not very featured at all yet, you can't send the messages back to slack yet.
 
 ### Events API
 
