@@ -74,7 +74,7 @@ public class OAuth2Controller {
         }
 
         try {
-            Response<SlackTeamAuthorization> res = slackClient.exchangeForAccessToken(
+            Response<SlackTeamAuthorization> res = slackClient.oauthAccess(
                     slackProperties.getApp().getClientId(),
                     slackProperties.getApp().getClientSecret(),
                     this.host(request) + "/auth/callback",

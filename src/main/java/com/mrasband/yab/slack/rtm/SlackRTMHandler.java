@@ -2,16 +2,11 @@ package com.mrasband.yab.slack.rtm;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mrasband.yab.slack.api.SlackClient;
-import com.mrasband.yab.slack.api.model.RTMConnection;
-import com.mrasband.yab.slack.rtm.event.Event;
+import com.mrasband.yab.slack.api.model.RTMStart;
+import com.mrasband.yab.slack.rtm.event.AbstractEvent;
 import com.mrasband.yab.slack.rtm.event.ReconnectUrl;
-import com.mrasband.yab.slack.rtm.event.messages.BaseMessage;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.util.StringUtils;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.client.WebSocketConnectionManager;
@@ -25,7 +20,7 @@ import java.io.IOException;
 
 /**
  * Websocket handler specific for the concerns of the Slack RTM API. Messages received
- * will be converted into the appropriate {@link com.mrasband.yab.slack.rtm.event.Event}
+ * will be converted into the appropriate {@link AbstractEvent}
  * type and broadcast as an application event. Any interested users can listen to the specific
  * types they care about, or all.
  *
@@ -62,12 +57,12 @@ public class SlackRTMHandler extends AbstractWebSocketHandler {
     private void initConnection() {
         SlackRTMHandler handler = this;
 
-        this.slackClient.connect(this.botToken)
-                .enqueue(new Callback<RTMConnection>() {
+        this.slackClient.rtmStart(this.botToken)
+                .enqueue(new Callback<RTMStart>() {
                     @Override
-                    public void onResponse(Call<RTMConnection> call, Response<RTMConnection> response) {
+                    public void onResponse(Call<RTMStart> call, Response<RTMStart> response) {
                         if (!response.isSuccessful()) {
-                            log.error("Non successful response type, unable to connect to Slack: %s",
+                            log.error("Non successful response type, unable to rtmStart to Slack: %s",
                                     response.code());
                             return;
                         }
@@ -79,8 +74,8 @@ public class SlackRTMHandler extends AbstractWebSocketHandler {
                     }
 
                     @Override
-                    public void onFailure(Call<RTMConnection> call, Throwable throwable) {
-                        log.error("Failed to connect to slack", throwable);
+                    public void onFailure(Call<RTMStart> call, Throwable throwable) {
+                        log.error("Failed to rtmStart to slack", throwable);
                     }
                 });
     }
@@ -118,17 +113,9 @@ public class SlackRTMHandler extends AbstractWebSocketHandler {
         log.info("Received event: {}", message.getPayload());
 
         try {
-            Event e = objectMapper.readValue(message.getPayload(), Event.class);
+            AbstractEvent e = objectMapper.readValue(message.getPayload(), AbstractEvent.class);
 
-            // This is a hack around multiple nesting of polymorphic types with Jackson deserialization.
-            // As far as I have been able to tell, Jackson neither supports this nor do they intend to:
-            //      https://github.com/FasterXML/jackson-databind/issues/374
-            // So instead we are just unmarshalling again with the root type as the message class instead.
-            // It's a little wasteful to do it twice, but until we have metrics that it's an issue - whatever!
-            if (!StringUtils.isEmpty(e.getType()) && e.getType().equals("message")) {
-                e = objectMapper.readValue(message.getPayload(), BaseMessage.class);
-            }
-
+            // TODO: manage membership state (channels, users, etc) - if we decide to care
             if (e instanceof ReconnectUrl) {
                 log.debug("Received new reconnect url");
                 synchronized (this) {
@@ -136,7 +123,7 @@ public class SlackRTMHandler extends AbstractWebSocketHandler {
                 }
             }
 
-            log.debug("Event deserialized, broadcasting: {}", e);
+            log.debug("AbstractEvent deserialized, broadcasting: {}", e);
             eventPublisher.publishEvent(e);
         } catch (Exception e) {
             log.error("Error deserializing:", e);

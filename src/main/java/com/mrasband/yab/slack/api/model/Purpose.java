@@ -6,6 +6,8 @@ import lombok.Data;
 import java.util.Date;
 
 /**
+ * Topic/Purpose for a channel, dm, pmim
+ *
  * @author matt.rasband
  */
 @Data

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mrasband.yab.slack.actions.SlackActionHandler;
 import com.mrasband.yab.slack.api.SlackClient;
 import com.mrasband.yab.slack.api.model.ActionResponse;
+import com.mrasband.yab.slack.api.model.ChatPostMessageResult;
 import com.mrasband.yab.slack.api.model.messaging.Message;
 import com.mrasband.yab.slack.rtm.SlackRTMHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -12,10 +13,18 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
 import javax.validation.ValidationException;
+import javax.validation.Validator;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /**
@@ -29,6 +38,8 @@ public class SlackService {
     private final SlackClient slackClient;
     private final ObjectMapper objectMapper;
     private final ApplicationEventPublisher eventPublisher;
+
+    private final Map<String, SlackRTMHandler> slackTeamHandlers = new HashMap<>();
 
     private final List<SlackActionHandler> handlers = Collections.synchronizedList(new ArrayList<>());
 
@@ -49,9 +60,10 @@ public class SlackService {
     void connectBots() {
         StreamSupport.stream(teamRepository.findAll().spliterator(), false)
                 .filter(a -> a.getBot() != null)
-                .map(a -> a.getBot().getBotAccessToken())
+//                .map(a -> a.getBot().getBotAccessToken())
                 .forEach(t -> {
-                    new SlackRTMHandler(t, slackClient, eventPublisher, objectMapper);
+                    slackTeamHandlers.put(t.getTeamId(),
+                            new SlackRTMHandler(t.getBot().getBotAccessToken(), slackClient, eventPublisher, objectMapper));
                 });
     }
 
@@ -81,27 +93,33 @@ public class SlackService {
         }
     }
 
-//    public void sendMessage(com.mrasband.yab.slack.api.model.messaging.BaseMessage message) {
-//        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-//        Set<ConstraintViolation<BaseMessage>> violations = validator.validate(message);
-//        if (violations.size() > 0) {
-//            String errors = violations.stream()
-//                    .map(m -> m.getInvalidValue() + m.getMessage())
-//                    .collect(Collectors.joining(": "));
-//            throw new ValidationException(String.format("Invalid object: %s", errors));
-//        }
-//
-//        try {
-//            String payload = objectMapper.writeValueAsString(message);
-//
-//            if (message.isComplex()) {
-//                // TOOD: Send via HTTP
-//            } else {
-//                // We can send simple messags over the RTM socket
-//                this.webSocketHandler.send(payload);
-//            }
-//        } catch (IOException e) {
-//            log.error("Error sending payload!", e);
-//        }
-//    }
+    /**
+     * Only sends via the API
+     */
+    public ChatPostMessageResult sendMessage(String teamId, Message message, boolean asBot) {
+        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+        Set<ConstraintViolation<Message>> violations = validator.validate(message);
+        if (violations.size() > 0) {
+            String errors = violations.stream()
+                    .map(m -> m.getPropertyPath() + " " + m.getMessage())
+                    .collect(Collectors.joining(", "));
+            throw new ValidationException(String.format("Invalid object: %s", errors));
+        }
+
+        try {
+            String token;
+            if (asBot) {
+                token = teamRepository.findOne(teamId).getBot().getBotAccessToken();
+            } else {
+                token = teamRepository.findOne(teamId).getAccessToken();
+            }
+
+            return slackClient.postMessage(token, message.getText(), message.getType(), message.getChannel(),
+                    objectMapper.writeValueAsString(message.getAttachments())).execute().body();
+        } catch (IOException e) {
+            log.error("Error sending payload!", e);
+        }
+
+        return null;
+    }
 }

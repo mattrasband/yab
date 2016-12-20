@@ -1,7 +1,6 @@
 package com.mrasband.yab.slack.rtm.event;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -10,8 +9,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@JsonTypeName("presence_change")
-public class PresenceChange extends Event {
+public class PresenceChange extends AbstractEvent {
     private String presence;
     @JsonProperty("user")
     private String userId;

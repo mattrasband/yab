@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 /**
- * The Web Event API wraps all events in a little meta
+ * The Web AbstractEvent API wraps all events in a little meta
  * data about the event and team.
  *
  * @author matt.rasband
@@ -14,12 +14,17 @@ import java.util.List;
 @Data
 public class WebEvent {
     private String token;
-    private Event event;
+
+    private AbstractEvent event;
+
     @JsonProperty("team_id")
     private String teamId;
+
     @JsonProperty("api_app_id")
     private String apiAppId;
-    private String type;  // probably just event_callback
+
+    private String type;  // usually just event_callback
+
     @JsonProperty("authed_users")
     private List<String> authedUsers;
 

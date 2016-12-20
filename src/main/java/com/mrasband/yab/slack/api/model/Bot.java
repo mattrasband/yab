@@ -24,6 +24,10 @@ public class Bot {
 
     private String name;
 
+    /**
+     * I am not sure what is all in here, usually I think
+     * it's just image_{36,48,72}
+     */
     @Setter(AccessLevel.NONE)
     private Map<String, String> icons = new HashMap<>();
 }

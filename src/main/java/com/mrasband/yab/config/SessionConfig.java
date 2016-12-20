@@ -1,6 +1,8 @@
 package com.mrasband.yab.config;
 
 import org.apache.catalina.session.StandardManager;
+import org.apache.catalina.startup.Tomcat;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatContextCustomizer;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
@@ -11,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
  * @author matt.rasband
  */
 @Configuration
+@ConditionalOnClass(Tomcat.class)
 public class SessionConfig {
     /**
      * Disable the tomcat sessions on disk, pretty much just

@@ -1,12 +1,12 @@
 package com.mrasband.yab.web;
 
 import com.mrasband.yab.slack.SlackService;
-import com.mrasband.yab.slack.api.SlackClient;
 import com.mrasband.yab.slack.api.model.SlashCommand;
 import com.mrasband.yab.slack.api.model.messaging.Attachment;
 import com.mrasband.yab.slack.api.model.messaging.Button;
 import com.mrasband.yab.slack.api.model.messaging.Message;
 import com.mrasband.yab.slack.api.model.messaging.TextField;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,14 +22,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/slash")
 @ConditionalOnProperty(prefix = "slack.slash", value = "enabled")
+@Slf4j
 public class ExampleSlashController {
     private final SlackService slackService;
-    private final SlackClient slackClient;
 
-    public ExampleSlashController(SlackService slackService,
-                                  SlackClient slackClient) {
+    public ExampleSlashController(SlackService slackService) {
         this.slackService = slackService;
-        this.slackClient = slackClient;
     }
 
     /**
@@ -45,6 +43,7 @@ public class ExampleSlashController {
         slackService.validateVerificationToken(cmd.getToken());
 
         Attachment at = Attachment.builder()
+                .callbackId("my_action")
                 .field(TextField.builder()
                         .isShort(true)
                         .title("Winning?")
@@ -65,10 +64,20 @@ public class ExampleSlashController {
                         .build())
                 .build();
 
-        return ResponseEntity.ok(Message.builder()
-                .text("Hello there")
-                .visibility(Message.Visibility.EPHEMERAL)
-                .attachment(at)
-                .build());
+        slackService.sendMessage(cmd.getTeam_id(), Message.builder()
+                .text("Hello, Slack!")
+                .channel(cmd.getChannel_id())
+                .attachment(Attachment.builder()
+                        .text("Here is an action")
+                        .fallback("Sane Fallback")
+                        .build())
+                .build(), true);
+
+        return ResponseEntity.ok(null);
+//        return ResponseEntity.ok(Message.builder()
+//                .text("Hello there")
+//                .visibility(Message.Visibility.EPHEMERAL)
+//                .attachment(at)
+//                .build());
     }
 }

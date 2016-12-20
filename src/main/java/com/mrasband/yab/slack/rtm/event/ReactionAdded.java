@@ -12,8 +12,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@JsonTypeName("reaction_added")
-public class ReactionAdded extends Event {
+public class ReactionAdded extends AbstractEvent {
     @JsonProperty("user")
     private String userId;
     private Item item;

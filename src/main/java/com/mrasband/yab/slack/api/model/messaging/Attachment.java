@@ -41,19 +41,24 @@ public class Attachment {
 
     @JsonProperty("author_name")
     private String authorName;
+
     @JsonProperty("author_link")
     private String authorLink;
+
     @JsonProperty("author_icon")
     private String authorIcon;
 
     @JsonProperty("image_url")
     private String imageUrl;
+
     @JsonProperty("thumb_url")
     private String thumbUrl;
 
     private String footer;
+
     @JsonProperty("footer_icon")
     private String footerIcon;
+
     @JsonProperty("ts")
     private String timestamp;
 

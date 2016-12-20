@@ -5,6 +5,7 @@ import com.mrasband.yab.slack.api.model.core.Group;
 import com.mrasband.yab.slack.api.model.core.MultipartyMessage;
 import com.mrasband.yab.slack.api.model.core.User;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +18,8 @@ import java.util.List;
  * @author matt.rasband
  */
 @Data
-public class RTMConnection {
-    private Boolean ok;
-
+@EqualsAndHashCode(callSuper = true)
+public class RTMStart extends RPCResult {
     private String url;
 
     private Me self;

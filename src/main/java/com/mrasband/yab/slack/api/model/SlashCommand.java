@@ -1,6 +1,5 @@
 package com.mrasband.yab.slack.api.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 /**
@@ -12,28 +11,21 @@ import lombok.Data;
 public class SlashCommand {
     private String token;
 
-    @JsonProperty("team_id")
-    private String teamId;
+    private String team_id;
 
-    @JsonProperty("team_domain")
-    private String teamDomain;
+    private String team_domain;
 
-    @JsonProperty("channel_id")
-    private String channelId;
+    private String channel_id;
 
-    @JsonProperty("channel_name")
-    private String channelName;
+    private String channel_name;
 
-    @JsonProperty("user_id")
-    private String userId;
+    private String user_id;
 
-    @JsonProperty("user_name")
-    private String userName;
+    private String user_name;
 
     private String command;
 
     private String text;
 
-    @JsonProperty("response_url")
-    private String responseUrl;
+    private String response_url;
 }

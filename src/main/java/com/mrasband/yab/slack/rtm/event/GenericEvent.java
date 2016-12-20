@@ -9,11 +9,14 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class GenericEvent extends Event {
+public class GenericEvent extends AbstractEvent {
     private Boolean ok;
+
     @JsonProperty("reply_to")
     private String replyTo;
+
     @JsonProperty("ts")
     private String timestamp;
+
     private String text;
 }

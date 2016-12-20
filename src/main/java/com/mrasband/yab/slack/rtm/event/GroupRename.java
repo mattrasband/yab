@@ -1,6 +1,5 @@
 package com.mrasband.yab.slack.rtm.event;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.mrasband.yab.slack.api.model.core.Group;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -11,8 +10,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@JsonTypeName("group_rename")
-public class GroupRename extends Event {
+public class GroupRename extends AbstractEvent {
     // This will be a partial, see the docs
     private Group channel;
 }

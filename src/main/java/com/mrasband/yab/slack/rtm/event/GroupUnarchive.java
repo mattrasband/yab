@@ -1,7 +1,6 @@
 package com.mrasband.yab.slack.rtm.event;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -11,8 +10,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@JsonTypeName("group_unarchive")
-public class GroupUnarchive extends Event {
+public class GroupUnarchive extends AbstractEvent {
     @JsonProperty("channel")
     private String channelId;
 }

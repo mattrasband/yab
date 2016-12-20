@@ -1,6 +1,5 @@
 package com.mrasband.yab.slack.rtm.event;
 
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.mrasband.yab.slack.api.model.core.Channel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -12,7 +11,6 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@JsonTypeName("channel_created")
-public class ChannelCreated extends Event {
+public class ChannelCreated extends AbstractEvent {
     private Channel channel;
 }

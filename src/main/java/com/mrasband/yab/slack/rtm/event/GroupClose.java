@@ -1,7 +1,6 @@
 package com.mrasband.yab.slack.rtm.event;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -11,8 +10,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@JsonTypeName("group_close")
-public class GroupClose extends Event {
+public class GroupClose extends AbstractEvent {
     @JsonProperty("user")
     private String userId;
     @JsonProperty("channel")

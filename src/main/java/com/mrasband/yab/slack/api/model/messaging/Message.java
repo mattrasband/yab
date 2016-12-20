@@ -1,5 +1,6 @@
 package com.mrasband.yab.slack.api.model.messaging;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -71,6 +72,11 @@ public class Message {
                 .replace("&", "&amp;")
                 .replace("<", "&lt;")
                 .replace(">", "&gt;");
+    }
+
+    @JsonIgnore
+    public boolean isComplex() {
+        return this.attachments != null && this.attachments.size() > 0;
     }
 
     /**

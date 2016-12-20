@@ -1,5 +1,6 @@
 /**
- * Message types for simple and complex instant messages.
+ * Message types for simple and complex instant messages, these are
+ * all types initiated by a bot, slash command, or action - not slack itself.
  *
  * @author matt.rasband
  */
