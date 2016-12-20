@@ -67,4 +67,11 @@ public class Attachment {
     @Singular("action")
     @Setter(AccessLevel.NONE)
     private List<Action> actions;
+
+    /**
+     * Required if you include Actions!
+     * TODO: validate
+     */
+    @JsonProperty("callback_id")
+    private String callbackId;
 }
